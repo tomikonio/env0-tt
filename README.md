@@ -141,7 +141,50 @@ docs(readme): update deployment instructions
 For any issues or questions, please contact:
 - Develeap Support Team
 
+## Requirements
+
+No requirements.
+
+## Providers
+
+No providers.
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_compute"></a> [compute](#module\_compute) | ./modules/compute | n/a |
+| <a name="module_loadbalancer"></a> [loadbalancer](#module\_loadbalancer) | ./modules/loadbalancer | n/a |
+| <a name="module_networking"></a> [networking](#module\_networking) | ./modules/networking | n/a |
+
+## Resources
+
+No resources.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region for the resources | `string` | `"us-east-1"` | no |
+| <a name="input_default_root_object"></a> [default\_root\_object](#input\_default\_root\_object) | Default root object for the CloudFront distribution | `string` | `"index.html"` | no |
+| <a name="input_end_date"></a> [end\_date](#input\_end\_date) | Project end date (dd/mm/yyyy) | `string` | n/a | yes |
+| <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | EC2 instance type | `string` | `"t3.micro"` | no |
+| <a name="input_owner"></a> [owner](#input\_owner) | Owner's develeap email (name.lastname@develeap.com) | `string` | n/a | yes |
+| <a name="input_project"></a> [project](#input\_project) | Project name (must be descriptive) | `string` | n/a | yes |
+| <a name="input_stage"></a> [stage](#input\_stage) | Environment stage (production, dev, or test) | `string` | n/a | yes |
+| <a name="input_start_date"></a> [start\_date](#input\_start\_date) | Project start date (dd/mm/yyyy) | `string` | n/a | yes |
+| <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | CIDR block for VPC | `string` | `"10.0.0.0/16"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_alb_dns_name"></a> [alb\_dns\_name](#output\_alb\_dns\_name) | DNS name of the ALB |
+| <a name="output_instance_public_ip"></a> [instance\_public\_ip](#output\_instance\_public\_ip) | Public IP of the EC2 instance |
+| <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | ID of the VPC |
+
 
 ## License
 
 Copyright © 2024 Develeap. All rights reserved.
+
