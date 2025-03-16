@@ -1,62 +1,62 @@
-# AWS CloudFront with Dual S3 Origins
+# AWS EC2 and Load Balancer - env0 Lab
 
-This Terraform configuration deploys a CloudFront distribution with two S3 bucket origins.
+This Terraform configuration demonstrates the deployment of an EC2 instance with an Application Load Balancer using env0 as the deployment platform. This lab is part of the Develeap training program.
+
+## Architecture Overview
+
+The infrastructure consists of three main components:
+
+1. **Networking Module**
+   - Custom VPC with public subnets
+   - Internet Gateway for public access
+   - Route tables and network ACLs
+
+2. **Compute Module**
+   - EC2 instance in a public subnet
+   - Security group for instance access
+   - Instance profile and IAM roles
+
+3. **Load Balancer Module**
+   - Application Load Balancer (ALB)
+   - Target group configuration
+   - Security group for ALB access
 
 ## Prerequisites
 
-- Terraform >= 1.2.0
-- AWS account with appropriate permissions
-- AWS regions supported: us-east-1, ap-south-1
+- An env0 account with appropriate permissions
+- Basic understanding of AWS EC2 and Load Balancing
+- Supported AWS regions: us-east-1
 
 ## Required Tags
 
-All resources will be automatically tagged with:
-- `owner`: DeveleaP email (name.lastname@develeap.com)
-- `stage`: production/dev/test
-- `project`: Project name
-- `start_date`: Project start date (dd/mm/yyyy)
-- `end_date`: Project end date (dd/mm/yyyy)
+The following tags will be automatically applied to all resources:
+- `owner`: Your email address
+- `stage`: Environment stage (production/dev/test)
+- `project`: Project identifier
+- `common_tags`: Additional project-specific tags
 
-## Usage
+## Configuration
 
-1. Initialize Terraform:
-```bash
-terraform init
-```
+Update your `terraform.tfvars` with appropriate values:
 
-2. Update `terraform.tfvars` with your values:
 ```hcl
-aws_region           = "us-east-1"
-primary_bucket_name   = "your-primary-bucket"
-secondary_bucket_name = "your-secondary-bucket"
-owner                = "name.lastname@develeap.com"
-stage                = "dev"
-project              = "project_name"
-start_date           = "01/01/2024"
-end_date             = "31/12/2024"
+vpc_cidr      = "10.0.0.0/16"
+project       = "your-project-name"
+instance_type = "t3.micro"
+owner         = "your.name@develeap.com"
+stage         = "dev"
 ```
 
-3. Apply the configuration:
-```bash
-terraform plan
-terraform apply
+## Deployment Steps
+
+1. In env0, create a new template pointing to this repository
+2. Configure the required AWS credentials in env0
+3. Set the necessary variables in your env0 template
+4. Deploy the environment through env0's UI
+
+## Project Structure
+
 ```
-
-## Architecture
-
-- Primary S3 bucket serves content from root path (/)
-- Secondary S3 bucket serves content from /secondary/*
-- CloudFront enforces HTTPS
-- S3 buckets are private, accessible only through CloudFront
-
-## Outputs
-
-- `cloudfront_domain_name`: The CloudFront distribution domain
-- `cloudfront_distribution_id`: The distribution ID
-- `primary_bucket_name`: Name of the primary S3 bucket
-- `secondary_bucket_name`: Name of the secondary S3 bucket
-
-```Folder struct
 .
 ├── main.tf          # Main configuration
 ├── variables.tf     # Input variables
@@ -64,14 +64,84 @@ terraform apply
 ├── providers.tf     # Provider configurations
 ├── terraform.tfvars # Variable values
 └── modules/
-    ├── s3/
+    ├── networking/  # VPC and subnet configurations
     │   ├── main.tf
     │   ├── variables.tf
     │   └── outputs.tf
-    └── cloudfront/
+    ├── compute/    # EC2 instance configurations
+    │   ├── main.tf
+    │   ├── variables.tf
+    │   └── outputs.tf
+    └── loadbalancer/# ALB configurations
         ├── main.tf
         ├── variables.tf
+        └── outputs.tf
 ```
 
-    └── outputs.tf
-'''
+## Outputs
+
+After successful deployment, you'll have access to:
+- `alb_dns_name`: The DNS name of the Application Load Balancer
+- `instance_id`: The ID of the deployed EC2 instance
+- `vpc_id`: The ID of the created VPC
+- `public_subnet_ids`: List of public subnet IDs
+
+## DVLP CI Tools
+
+This repository implements strict code quality standards and commit message conventions using Husky and commitlint.
+
+### Installation
+
+To set up the project dependencies:
+```bash
+make install
+```
+
+### Commit Message Convention
+
+Follow the Conventional Commits specification:
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer]
+```
+
+#### Commit Types
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code styling changes
+- `refactor`: Code refactoring
+- `perf`: Performance improvements
+- `test`: Adding/updating tests
+- `build`: Build process changes
+- `ci`: CI configuration changes
+- `chore`: Other changes
+- `revert`: Reverting commits
+
+#### Required Components
+- **Type**: Indicates commit purpose (required)
+- **Scope**: Affected component/module (required)
+- **Description**: Brief change summary (required)
+- **Body**: Detailed explanation (optional)
+- **Footer**: References/breaking changes (optional)
+
+#### Example Commits
+```
+feat(networking): add custom VPC configuration
+fix(compute): resolve instance startup issue
+docs(readme): update deployment instructions
+```
+
+## Support
+
+For any issues or questions, please contact:
+- Develeap Support Team
+
+
+## License
+
+Copyright © 2024 Develeap. All rights reserved.
