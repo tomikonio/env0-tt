@@ -1,71 +1,77 @@
-# DVLP CI Tools
+# AWS CloudFront with Dual S3 Origins
 
-This repository contains configuration and scripts to ensure code quality and enforce commit message conventions in a development environment.
+This Terraform configuration deploys a CloudFront distribution with two S3 bucket origins.
 
-## Description
+## Prerequisites
 
-The project uses Husky to manage Git hooks, ensuring that certain standards are met before code is pushed to the repository. The `commitlint` tool is used to enforce conventional commit messages, which helps in maintaining a clear and readable commit history.
+- Terraform >= 1.2.0
+- AWS account with appropriate permissions
+- AWS regions supported: us-east-1, ap-south-1
 
-## Installation
+## Required Tags
 
-To set up the project dependencies, run the following command:
+All resources will be automatically tagged with:
+- `owner`: DeveleaP email (name.lastname@develeap.com)
+- `stage`: production/dev/test
+- `project`: Project name
+- `start_date`: Project start date (dd/mm/yyyy)
+- `end_date`: Project end date (dd/mm/yyyy)
 
+## Usage
+
+1. Initialize Terraform:
 ```bash
-make install
+terraform init
 ```
 
-## Writing Commit Messages
-
-When writing commit messages, follow the Conventional Commits specification. Here's the basic format:
-
-```php
-<type>(<scope>): <description>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
+2. Update `terraform.tfvars` with your values:
+```hcl
+aws_region           = "us-east-1"
+primary_bucket_name   = "your-primary-bucket"
+secondary_bucket_name = "your-secondary-bucket"
+owner                = "name.lastname@develeap.com"
+stage                = "dev"
+project              = "project_name"
+start_date           = "01/01/2024"
+end_date             = "31/12/2024"
 ```
 
-Components of a Commit Message
-
-* **Type (required):** Indicates the purpose of the commit. Common types include:
-  * feat (new feature)
-  * fix (bug fix)
-  * docs (documentation changes)
-  * style (code styling, no functional changes)
-  * refactor (code refactoring)
-  * perf (performance improvements)
-  * test (adding or updating tests)
-  * build (changes to build process)
-  * ci (changes to CI configuration)
-  * chore (other changes that don't modify src or test files)
-  * revert (reverting a previous commit)
-* **Scope (required):** A scope provides additional contextual information on the part of the application that is affected by the change.
-* **Description (required):** A brief description of the changes, starting with a lowercase letter and without a period at the end.
-* **Body (optional):** A longer description of the changes, providing more context or explanations as needed. This section can include multiple paragraphs and can list changes or elaborate on the impacts.
-* **Footer (optional):** Used to reference issue tracker IDs, pull request numbers, breaking changes, or other metadata, such as:
-  * Fixes #123
-  * BREAKING CHANGE: Changes that break existing functionality.
-
-### Example Commit Messages
-
-```php
-  feat(auth): add support for OAuth2
-  fix(server): resolve memory leak in image processing
-  docs(readme): update installation instructions
+3. Apply the configuration:
+```bash
+terraform plan
+terraform apply
 ```
 
+## Architecture
+
+- Primary S3 bucket serves content from root path (/)
+- Secondary S3 bucket serves content from /secondary/*
+- CloudFront enforces HTTPS
+- S3 buckets are private, accessible only through CloudFront
+
+## Outputs
+
+- `cloudfront_domain_name`: The CloudFront distribution domain
+- `cloudfront_distribution_id`: The distribution ID
+- `primary_bucket_name`: Name of the primary S3 bucket
+- `secondary_bucket_name`: Name of the secondary S3 bucket
+
+```Folder struct
+.
+├── main.tf          # Main configuration
+├── variables.tf     # Input variables
+├── outputs.tf       # Output values
+├── providers.tf     # Provider configurations
+├── terraform.tfvars # Variable values
+└── modules/
+    ├── s3/
+    │   ├── main.tf
+    │   ├── variables.tf
+    │   └── outputs.tf
+    └── cloudfront/
+        ├── main.tf
+        ├── variables.tf
 ```
-  feat(auth): add support for OAuth2
 
-  This update includes new OAuth2 support for our authentication module, allowing for more secure and versatile login capabilities across platforms.
-
-  Related to task #456 in the project management tool.
-```
-
-### Common Issues and Troubleshooting
-
-Commitlint not running: Ensure the Husky hooks are properly set up and the scripts are executable.
-Failing commits: If your commits are failing, check that your commit messages strictly follow the specified format.
-
-<3
+    └── outputs.tf
+'''
