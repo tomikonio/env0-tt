@@ -1,0 +1,72 @@
+# commitlint.config.yml
+
+extends:
+  - "@commitlint/config-conventional"
+
+rules:
+  # Define custom rules
+  # scope-enum:
+  #   - 2
+  #   - always
+  #   - [
+  #       "ci",
+  #       "cd",
+  #       "infra",
+  #       "config",
+  #       "docs",
+  #       "tests",
+  #       "feat",
+  #       "fix",
+  #       "chore",
+  #       "style",
+  #       "refactor",
+  #       "perf"
+  #     ]
+  type-enum:
+    - 2
+    - always
+    - [
+        "build",
+        "ci",
+        "chore",
+        "docs",
+        "feat",
+        "fix",
+        "perf",
+        "refactor",
+        "revert",
+        "style",
+        "test"
+      ]
+  header-max-length:
+    - 2
+    - always
+    - 72
+  body-max-line-length:
+    - 2
+    - always
+    - 100
+  footer-max-line-length:
+    - 2
+    - always
+    - 100
+
+# Define a custom parser preset (if needed)
+# parserPreset:
+#   parserOpts:
+#     headerPattern: /^(\w*)(?:\((.*)\))?-(.*)$/
+#     headerCorrespondence: ["type", "scope", "subject"]
+#     noteKeywords: ["BREAKING CHANGE"]
+#     revertPattern: /^(Revert)\s"([\s\S]*)"\s*This reverts commit (\w*)\./
+#     revertCorrespondence: ["header", "hash"]
+
+# Optional: Override default prompt settings
+prompt:
+  questions:
+    type: "What type of change are you committing?"
+    scope: "What is the scope of this change?"
+    subject: "Write a short description of the change:"
+    body: "Provide a longer description of the change:"
+    footer: "List any issues closed by this change:"
+    confirmCommit: "Are you sure you want to proceed with the commit above?"
+
