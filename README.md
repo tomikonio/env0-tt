@@ -29,11 +29,19 @@ The infrastructure consists of three main components:
 
 ## Required Tags
 
-The following tags will be automatically applied to all resources:
+The following tags MUST be applied to all resources to comply with AWS policies:
+
+### Mandatory AWS Tags
+- `Objective`: Must be set to "true"
+- `Expiration`: Must be set to "true"
+- `Email`: Must be set to "true"
+
+### Project Tags
 - `owner`: Your email address
 - `stage`: Environment stage (production/dev/test)
 - `project`: Project identifier
-- `common_tags`: Additional project-specific tags
+
+Failure to include these tags will result in deployment failures due to AWS IAM policies.
 
 ## Configuration
 
@@ -45,6 +53,13 @@ project       = "your-project-name"
 instance_type = "t3.micro"
 owner         = "your.name@develeap.com"
 stage         = "dev"
+
+# Required AWS tags
+tags = {
+  Objective  = "true"
+  Expiration = "true"
+  Email      = "true"
+}
 ```
 
 ## Deployment Steps
@@ -52,7 +67,8 @@ stage         = "dev"
 1. In env0, create a new template pointing to this repository
 2. Configure the required AWS credentials in env0
 3. Set the necessary variables in your env0 template
-4. Deploy the environment through env0's UI
+4. Ensure all required tags are configured
+5. Deploy the environment through env0's UI
 
 ## Project Structure
 

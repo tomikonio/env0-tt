@@ -6,5 +6,8 @@ locals {
     start_date = var.start_date
     end_date   = var.end_date
     managed_by = "terraform"
+    email      = var.email
+    Objective  = var.Objective
+    Expiration = "true"
   }
 }

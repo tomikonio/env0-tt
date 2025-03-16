@@ -1,8 +1,8 @@
 # Infrastructure variables
-variable "aws_region" {
-  description = "AWS region for the resources"
+variable "aws_profile" {
+  description = "AWS profile"
   type        = string
-  default     = "us-east-1"
+  default     = "default"
 }
 
 variable "vpc_cidr" {
@@ -74,3 +74,16 @@ variable "end_date" {
     error_message = "End date must be in format dd/mm/yyyy"
   }
 } 
+variable "email" {
+  description = "Owner's email"
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$", var.email))
+    error_message = "Email must be a valid email address"
+  }
+}
+variable "Objective" {
+  description = "Objective of the project"
+  type        = string
+}
